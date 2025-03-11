@@ -75,6 +75,7 @@ export default function BookTickets() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           numberOfTickets,
+          ticketType: bookingType, // Ensure ticketType is included
           amount,
         }),
       });
@@ -87,7 +88,7 @@ export default function BookTickets() {
         amount: data.amount,
         currency: data.currency,
         name: 'humours Hub',
-        description: `${numberOfTickets} ${bookingType === 'couple' ? 'Couple' : 'Show'} Ticket${numberOfTickets > 1 ? 's' : ''} @ ₹${amount} each`,
+        description: `${numberOfTickets} ${bookingType === 'couple' ? 'Couple' : 'Show'} Ticket${numberOfTickets > 1 ? 's' : ''} @ ₹${amount / 100} each`,
         order_id: data.orderId,
         handler: async (response: any) => {
           try {
@@ -170,7 +171,7 @@ export default function BookTickets() {
         const data = await res.json();
         if (!res.ok) throw new Error(data.message);
 
-        await handlePayment(data.bookingId, numberOfTickets * amount); // ₹99 or ₹149 per ticket
+        await handlePayment(data.bookingId, numberOfTickets * amount * 100); // ₹99 or ₹149 per ticket
       } else {
         // Comedian registration logic
         const res = await fetch('/api/comedians/register', {

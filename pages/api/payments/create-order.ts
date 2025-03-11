@@ -36,13 +36,15 @@ export default async function handler(
       throw new Error('Missing Razorpay credentials');
     }
 
-    const { numberOfTickets } = req.body;
+    const { numberOfTickets, ticketType } = req.body;
 
     if (!numberOfTickets || numberOfTickets < 1) {
       return res.status(400).json({ message: 'Invalid number of tickets' });
     }
 
-    const amount = numberOfTickets * 9900; // ₹99 per ticket in paise
+    // Determine price per ticket based on type
+    const pricePerTicket = ticketType === 'couple' ? 14900 : 9900; // Prices in paise
+    const amount = numberOfTickets * pricePerTicket;
     const currency = 'INR';
 
     const options = {

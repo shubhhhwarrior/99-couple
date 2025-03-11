@@ -32,6 +32,11 @@ export const generateTicketPDF = async ({
   ticketPrice = 99,
   paymentTime
 }: TicketProps) => {
+  // Determine correct ticket price based on category
+  if (showDetails.category === 'couple') {
+    ticketPrice = 149;
+  }
+
   // Use A4 with custom margins
   const doc = new jsPDF({
     orientation: 'portrait',
@@ -134,8 +139,8 @@ export const generateTicketPDF = async ({
   
   doc.setFont('helvetica', 'normal');
   doc.text(`Quantity: ${numberOfTickets}`, leftColumnX, cardY + 130);
-  doc.text(`Price per Ticket: ${ticketPrice}`, leftColumnX, cardY + 137);
-  doc.text(`Total Amount: ${numberOfTickets * ticketPrice}`, leftColumnX, cardY + 144);
+  doc.text(`Price per Ticket: ₹${ticketPrice}`, leftColumnX, cardY + 137);
+  doc.text(`Total Amount: ₹${numberOfTickets * ticketPrice}`, leftColumnX, cardY + 144);
 
   // QR Code Generation
   try {
